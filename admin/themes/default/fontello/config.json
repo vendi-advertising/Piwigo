@@ -105,7 +105,7 @@
     {
       "uid": "7034e4d22866af82bef811f52fb1ba46",
       "css": "code",
-      "code": 59402,
+      "code": 8962,
       "src": "fontawesome"
     },
     {
@@ -804,6 +804,12 @@
       "uid": "671f29fa10dda08074a4c6a341bb4f39",
       "css": "bell",
       "code": 61683,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "8f8278fbe5a2a0ea836be3c408b005d2",
+      "css": "star-half",
+      "code": 59485,
       "src": "fontawesome"
     },
     {
