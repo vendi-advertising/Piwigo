@@ -1242,3 +1242,9 @@ $lang['No access to administration, can see private content with appropriate per
 $lang['Can be shared by several individuals without conflict (they cannot change the password).'] = 'Partageable entre plusieurs personnes sans rentrer en conflit (mot de passe non modifiable).';
 $lang['Equivalent to deactivation. The user is still in the list, but can no longer log in.'] = 'Équivalent à une désactivation. L\'utilisateur est toujours dans la liste mais ne peut plus se connecter.';
 $lang['%s MB'] = '%s Mo';
+$lang['Visited'] = 'Visité';
+$lang['Downloaded'] = 'Téléchargé';
+$lang['Most visited'] = 'Les plus visitées';
+$lang['Best rated'] = 'Les mieux notées';
+$lang['Random'] = 'Aléatoire';
+$lang['Favorites'] = 'Favoris';
