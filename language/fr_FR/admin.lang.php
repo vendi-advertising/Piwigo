@@ -1245,3 +1245,4 @@ $lang['%s MB'] = '%s Mo';
 $lang['Visited'] = 'Visité';
 $lang['Downloaded'] = 'Téléchargé';
 $lang['Personnalized filters'] = 'Filtres personnalisés';
+$lang['Object'] = 'Objet';
