@@ -1242,7 +1242,4 @@ $lang['Equivalent to deactivation. The user is still in the list, but can no lon
 $lang['%s MB'] = '%s MB';
 $lang['Visited'] = 'Visited';
 $lang['Downloaded'] = 'Downloaded';
-$lang['Most visited'] = 'Most visited';
-$lang['Best rated'] = 'Best rated';
-$lang['Random'] = 'Random';
-$lang['Favorites'] = 'Favorites';
+$lang['Personnalized filters'] = 'Personnalized filters';
