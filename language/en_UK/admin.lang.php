@@ -1244,3 +1244,4 @@ $lang['Visited'] = 'Visited';
 $lang['Downloaded'] = 'Downloaded';
 $lang['Personnalized filters'] = 'Personnalized filters';
 $lang['Object'] = 'Object';
+$lang['Memories'] = 'Souvenirs';
