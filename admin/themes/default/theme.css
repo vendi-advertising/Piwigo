@@ -5361,3 +5361,9 @@ color:#FF7B00;
 .selectable-filter .elem-type-select {
   margin-top: 5px !important;
 }
+
+.filter-title, .remove-filter, .filter-icon {
+  color: #777;
+  background: #fff;
+  padding: 5px 0;
+}
