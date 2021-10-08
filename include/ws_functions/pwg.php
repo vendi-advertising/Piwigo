@@ -1029,6 +1029,8 @@ SELECT
 
   unset($name_of_tag);
 
+  sleep(3);
+
   return array(
     'lines'   => $result,
     'params'  => $param,
