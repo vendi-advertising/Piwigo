@@ -83,9 +83,9 @@ jQuery(document).ready(function() {
         for (i=0;i<data.length;i++) {
           {/literal}
           {if $show_details}
-            jQuery('#'+data[i]+' .pluginBoxNameCell').prepend('<a class="warning" title="'+incompatible_msg+'"></a>')
+            jQuery('#'+data[i]+' .pluginName').prepend('<a class="warning" title="'+incompatible_msg+'"></a>')
           {else}
-            jQuery('#'+data[i]+' .pluginMiniBoxNameCell').prepend('<span class="warning" title="'+incompatible_msg+'"></span>')
+            jQuery('#'+data[i]+' .pluginName').prepend('<span class="warning" title="'+incompatible_msg+'"></span>')
           {/if}
           {literal}
           jQuery('#'+data[i]).addClass('incompatible');
@@ -114,21 +114,6 @@ jQuery(document).ready(function() {
     'keepAlive':false,
   });
 
-  /* Add the '...' for the overflow of the description line*/
-  jQuery( document ).ready(function () {
-    jQuery('.pluginDesc').each(function () {
-      var el = jQuery(this).context;
-      var wordArray = el.innerHTML.split(' ');
-      if (el.scrollHeight > el.offsetHeight) {
-        jQuery(this).attr('title', jQuery(this).html())
-      }
-      while(el.scrollHeight > el.offsetHeight) {
-          wordArray.pop();
-          el.innerHTML = wordArray.join(' ') + '...';
-      }
-    })
-  });
-
   /*Add the filter research*/
   jQuery( document ).ready(function () {
     document.onkeydown = function(e) {
@@ -142,12 +127,12 @@ jQuery(document).ready(function() {
       let text = jQuery(this).val().toLowerCase();
       var searchNumber = 0;
       
-        $(".pluginMiniBox").each(function() {
+        $(".pluginBox").each(function() {
           if (text == "") {
             jQuery(this).fadeIn();
             searchNumber++
           } else {
-            let name = jQuery(this).find(".pluginMiniBoxNameCell").text().toLowerCase();
+            let name = jQuery(this).find(".pluginName").text().toLowerCase();
             let description = jQuery(this).find(".pluginDesc").text().toLowerCase();
             if (name.search(text) != -1 || description.search(text) != -1){
               searchNumber++;
@@ -188,14 +173,14 @@ jQuery(document).ready(function() {
 
 $(document).mouseup(function (e) {
   e.stopPropagation();
-  $(".pluginMiniBox").each(function() {  
+  $(".pluginBox").each(function() {  
     if ($(this).find(".showOptions").has(e.target).length === 0) {
       $(this).find(".PluginOptionsBlock").hide();
     }
   })
 });
 
-jQuery(".pluginMiniBox").each(function(index){
+jQuery(".pluginBox").each(function(index){
   let myplugin = jQuery(this);
   myplugin.find(".showOptions").click(function(){
     myplugin.find(".PluginOptionsBlock").toggle();
@@ -254,7 +239,7 @@ jQuery(".pluginMiniBox").each(function(index){
     {assign var='version' value=$plugin.VERSION}
   {/if}
 
-  <div id="{$plugin.ID}" class="pluginMiniBox {$plugin.STATE} plugin-{$plugin.STATE}">
+<div id="{$plugin.ID}" class="pluginBox pluginMiniBox {$plugin.STATE} plugin-{$plugin.STATE}">
 
     <div class="AddPluginSuccess pluginNotif">
       <label class="icon-ok">
@@ -332,7 +317,7 @@ jQuery(".pluginMiniBox").each(function(index){
           <a class="dropdown-option icon-back-in-time plugin-restore separator-top">{'Restore'|@translate}</a>
           <a class="dropdown-option icon-trash delete-plugin-button separator-top">{'Delete'|@translate}</a>
       </div>
-      <div class="pluginMiniBoxNameCell" data-title="{$plugin.NAME}">
+      <div class="pluginName" data-title="{$plugin.NAME}">
         {$plugin.NAME}
       </div>
       <div class="pluginDesc">
@@ -438,7 +423,7 @@ jQuery(".pluginMiniBox").each(function(index){
   display: flex;
 }
 
-.pluginMiniBox.active .pluginActionsSmallIcons a span {
+.pluginBox.active .pluginActionsSmallIcons a span {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -448,7 +433,7 @@ jQuery(".pluginMiniBox").each(function(index){
   border-radius: 5px;
 }
 
-.pluginMiniBox.active .pluginActionsSmallIcons a span:hover {
+.pluginBox.active .pluginActionsSmallIcons a span:hover {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -458,7 +443,7 @@ jQuery(".pluginMiniBox").each(function(index){
   border-radius: 5px;
 }
 
-.pluginMiniBox.inactive .pluginActionsSmallIcons a span {
+.pluginBox.inactive .pluginActionsSmallIcons a span {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -472,7 +457,7 @@ jQuery(".pluginMiniBox").each(function(index){
   text-decoration: none;
 }
 
-.pluginMiniBox {
+.pluginBox {
   transition: 0.5s;
   position: relative;
 }
@@ -588,26 +573,26 @@ jQuery(".pluginMiniBox").each(function(index){
   flex-direction: column;
 }
 
-.pluginContainer.line .pluginMiniBox {
+.pluginContainer.line .pluginBox {
   width: 100%;
   height: 50px;
 
   margin: 0 0 10px 0;
 }
 
-.pluginContainer.line .pluginMiniBox .pluginContent{
+.pluginContainer.line .pluginBox .pluginContent{
   display: flex;
   flex-direction: row;
   align-items: center;
   width: calc(100% - 35px);
 }
 
-.pluginContainer.line .pluginMiniBox .pluginActions{
+.pluginContainer.line .pluginBox .pluginActions{
   width: auto;
   margin: 0 25px 0 auto;
 }
 
-.pluginContainer.line .pluginMiniBox .PluginOptionsBlock{
+.pluginContainer.line .pluginBox .PluginOptionsBlock{
   display:none;
   position:absolute;
   right: 30px;
@@ -616,7 +601,7 @@ jQuery(".pluginMiniBox").each(function(index){
   transform: translateY(calc(50% - 30px));
 }
 
-.pluginContainer.line .pluginMiniBox .dropdown::after {
+.pluginContainer.line .pluginBox .dropdown::after {
   content: " ";
   position: absolute;
   bottom: 55%;
@@ -629,15 +614,15 @@ jQuery(".pluginMiniBox").each(function(index){
 }
 
 
-.pluginContainer.line .pluginMiniBox .pluginActions a,
-.pluginContainer.classic .pluginMiniBox .pluginActions a{
+.pluginContainer.line .pluginBox .pluginActions a,
+.pluginContainer.classic .pluginBox .pluginActions a{
   margin: 0;
   padding: 2px 10px;
   border-radius: 5px;
   color: #3c3c3c;
 }
 
-.pluginContainer.line .pluginMiniBox .pluginDesc{
+.pluginContainer.line .pluginBox .pluginDesc{
   margin:  auto 10px auto 10px;
   display: block !important;
   align-items: center;
@@ -659,7 +644,7 @@ jQuery(".pluginMiniBox").each(function(index){
   flex-wrap: wrap;
 }
 
-.pluginContainer.classic .pluginMiniBoxNameCell {
+.pluginContainer.classic .pluginName {
   position: relative;
   margin-right: 10px;
 }
@@ -669,7 +654,7 @@ jQuery(".pluginMiniBox").each(function(index){
   top: 45px;
 }
 
-.pluginContainer.classic .pluginMiniBox .pluginActions {
+.pluginContainer.classic .pluginBox .pluginActions {
   position: absolute;
   top: 47px;
   right: 17px;
@@ -688,13 +673,13 @@ jQuery(".pluginMiniBox").each(function(index){
   flex-wrap: wrap;
 }
 
-.pluginContainer.compact .pluginMiniBox {
+.pluginContainer.compact .pluginBox {
   width: 350px;
 
   margin: 15px 15px 0 0;
 }
 
-.pluginContainer.compact .pluginMiniBox .pluginContent {
+.pluginContainer.compact .pluginBox .pluginContent {
   display: flex;
   flex-direction: row;
 
