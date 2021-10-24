@@ -1,6 +1,6 @@
 function setDisplayClassic() {
     console.log("DISPLAY CLASSIC");
-    $(".pluginContainer").removeClass("line").removeClass("compact").addClass("classic");
+    $(".pluginContainer").removeClass("line-form").removeClass("compact-form").addClass("classic-form");
 
     $(".pluginDesc").show();
     $(".pluginDescCompact").hide();
@@ -14,7 +14,7 @@ function setDisplayClassic() {
 
 function setDisplayCompact() {
     console.log("DISPLAY COMPACT");
-    $(".pluginContainer").removeClass("line").addClass("compact").removeClass("classic");
+    $(".pluginContainer").removeClass("line-form").addClass("compact-form").removeClass("classic-form");
 
     $(".pluginDesc").hide();
     $(".pluginDescCompact").show();
@@ -28,7 +28,7 @@ function setDisplayCompact() {
 
 function setDisplayLine() {
     console.log("DISPLAY LINE");
-    $(".pluginContainer").addClass("line").removeClass("compact").removeClass("classic");
+    $(".pluginContainer").addClass("line-form").removeClass("compact-form").removeClass("classic-form");
 
     $(".pluginDesc").show();
     $(".pluginDescCompact").hide();
