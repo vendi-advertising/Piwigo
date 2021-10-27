@@ -1,5 +1,4 @@
 function setDisplayClassic() {
-    console.log("DISPLAY CLASSIC");
     $(".pluginContainer").removeClass("line-form").removeClass("compact-form").addClass("classic-form");
 
     $(".pluginDesc").show();
@@ -13,7 +12,6 @@ function setDisplayClassic() {
 }
 
 function setDisplayCompact() {
-    console.log("DISPLAY COMPACT");
     $(".pluginContainer").removeClass("line-form").addClass("compact-form").removeClass("classic-form");
 
     $(".pluginDesc").hide();
@@ -27,7 +25,6 @@ function setDisplayCompact() {
 }
 
 function setDisplayLine() {
-    console.log("DISPLAY LINE");
     $(".pluginContainer").addClass("line-form").removeClass("compact-form").removeClass("classic-form");
 
     $(".pluginDesc").show();
@@ -62,8 +59,6 @@ function normalTitle() {
 }
 
 function activatePlugin(id) {
-    console.log("Plugin activated");
-    console.log(id);
 
     $("#"+id+" .switch").attr("disabled", true);
 
@@ -84,24 +79,20 @@ function activatePlugin(id) {
                 $("#" + id + " .AddPluginSuccess").css("display", "flex");
             }
         }, 
-        error: function () {
+        error: function (e) {
             console.log(e);
-            console.log("It didn't work");
             $("#" + id + " .pluginNotif").stop(false, true);
             $("#" + id + " .PluginActionError label span:first").html(plugin_action_error);
             $("#" + id + " .PluginActionError").css("display", "flex");
             $("#" + id + " .PluginActionError").delay(1500).fadeOut(2500);
         }
     }).done(function (data) {
-        console.log(data);
         $("#"+id+" .switch").attr("disabled", false);
         $("#" + id + " .AddPluginSuccess").fadeOut(3000);
     })
 }
 
 function disactivatePlugin(id) {
-    console.log("Plugin disactivated");
-    console.log(id);
     $("#"+id+" .switch").attr("disabled", true);
 
     $.ajax({
@@ -121,26 +112,20 @@ function disactivatePlugin(id) {
                 $("#" + id + " .DeactivatePluginSuccess").css("display", "flex");
             }
         }, 
-        error: function () {
+        error: function (e) {
             console.log(e);
-            console.log("It didn't work");
             $("#" + id + " .pluginNotif").stop(false, true);
             $("#" + id + " .PluginActionError label span:first").html(plugin_action_error);
             $("#" + id + " .PluginActionError").css("display", "flex");
             $("#" + id + " .PluginActionError").delay(1500).fadeOut(2500);
         }
     }).done(function (data) {
-        console.log(data);
         $("#"+id+" .switch").attr("disabled", false);
         $("#" + id + " .DeactivatePluginSuccess").fadeOut(3000);
     })
 }
 
 function deletePlugin(id, name) {
-    console.log("Plugin deletetion");
-    console.log(id);
-    console.log(pwg_token);
-
     $.alert({
         title : deleted_plugin_msg.replace("%s",name),
         content: function() {
@@ -161,7 +146,6 @@ function deletePlugin(id, name) {
                     }, 
                     error: function (e) {
                         console.log(e);
-                        console.log("It didn't work");
                         $("#" + id + " .pluginNotif").stop(false, true);
                         $("#" + id + " .PluginActionError label span:first").html(plugin_action_error);
                         $("#" + id + " .PluginActionError").css("display", "flex");
@@ -174,10 +158,6 @@ function deletePlugin(id, name) {
 }
 
 function restorePlugin(id) {
-    console.log("Plugin restoration");
-    console.log(id);
-    console.log(pwg_token);
-
     $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -197,7 +177,6 @@ function restorePlugin(id) {
         }, 
         error: function (e) {
             console.log(e);
-            console.log("It didn't work");
             $("#" + id + " .pluginNotif").stop(false, true);
             $("#" + id + " .PluginActionError label span:first").html(plugin_action_error);
             $("#" + id + " .PluginActionError").css("display", "flex");
@@ -209,10 +188,6 @@ function restorePlugin(id) {
 }
 
 function uninstallPlugin(id) {
-    console.log("Plugin uninstallated");
-    console.log(id);
-    console.log(pwg_token);
-
     $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -222,13 +197,9 @@ function uninstallPlugin(id) {
                 plugin: id, 
                 pwg_token: pwg_token, 
                 format: 'json' },
-        success: function (data) {
-            console.log(data);
-            console.log("it works (uninstallated)");
-        }, 
+        success: function (data) {}, 
         error: function (e) {
             console.log(e);
-            console.log("It didn't work");
         }
     })
 }
@@ -238,7 +209,6 @@ function actualizeFilter() {
     $(".pluginBox").each(function () {
         if ($(this).hasClass("plugin-active")) {
             $("label[for='seeActive']").show();
-            console.log("BLEU");
         }
         if ($(this).hasClass("plugin-inactive")) {
             $("label[for='seeInactive']").show();
@@ -286,12 +256,10 @@ $(document).ready(function () {
     /* Plugin Filters */
 
     $("#seeAll").on("change", function () {
-        console.log("All");
         $(".pluginBox").show();
     })
 
     $("#seeActive").on("change", function () {
-        console.log("Active");
         $(".pluginBox").show();
         $(".pluginBox").each(function () {
             if (!$(this).hasClass("plugin-active")) {
@@ -301,7 +269,6 @@ $(document).ready(function () {
     })
 
     $("#seeInactive").on("change", function () {
-        console.log("Inactive");
         $(".pluginBox").show();
         $(".pluginBox").each(function () {
             if (!$(this).hasClass("plugin-inactive")) {
@@ -311,7 +278,6 @@ $(document).ready(function () {
     })
 
     $("#seeOther").on("change", function () {
-        console.log("Other");
         $(".pluginBox").show();
         $(".pluginBox").each(function () {
             if (($(this).hasClass("plugin-active") || $(this).hasClass("plugin-inactive"))) {
@@ -328,7 +294,6 @@ $(document).ready(function () {
     $(".switch").change(function () {
         if ($(this).find("#toggleSelectionMode").is(':checked')) {
             activatePlugin($(this).parent().parent().attr("id"));
-            console.log("activatePlugin");
 
             $(this).parent().parent().addClass("plugin-active").removeClass("plugin-inactive");
             if ($(this).parent().parent().find(".pluginUnavailableAction").attr("href")) {
@@ -336,7 +301,6 @@ $(document).ready(function () {
             }
         } else {
             disactivatePlugin($(this).parent().parent().attr("id"))
-            console.log("disactivatePlugin");
 
             $(this).parent().parent().removeClass("plugin-active").addClass("plugin-inactive");
             $(this).parent().parent().find(".pluginActionLevel1").removeClass("pluginActionLevel1").addClass("pluginUnavailableAction");
@@ -351,7 +315,6 @@ $(document).ready(function () {
     $(".pluginContent").find('.dropdown-option.delete-plugin-button').on('click', function () {
         let plugin_name = $(this).closest(".pluginContent").find(".pluginName").html().trim();
         let plugin_id = $(this).closest(".pluginContent").parent().attr("id");
-        console.log($(this).closest(".pluginContent").parent().attr("id"));
         $.confirm({
           title: delete_plugin_msg.replace("%s",plugin_name),
           buttons: {
@@ -376,7 +339,6 @@ $(document).ready(function () {
       $(".pluginContent").find('.dropdown-option.plugin-restore').on('click', function () {
         let plugin_name = $(this).closest(".pluginContent").find(".pluginName").html().trim();
         let plugin_id = $(this).closest(".pluginContent").parent().attr("id");
-        console.log($(this).closest(".pluginContent").parent().attr("id"));
         $.confirm({
           title: restore_plugin_msg.replace('%s', plugin_name),
           buttons: {
@@ -401,7 +363,6 @@ $(document).ready(function () {
       $(".pluginContent").find('.uninstall-plugin-button').on('click', function () {
         let plugin_name = $(this).closest(".pluginContent").find(".pluginName").html().trim();
         let plugin_id = $(this).closest(".pluginContent").parent().attr("id");
-        console.log($(this).closest(".pluginContent").parent().attr("id"));
         $.confirm({
           title: restore_plugin_msg.replace('%s', plugin_name),
           buttons: {
