@@ -1254,3 +1254,5 @@ $lang['This plugin have no update since 3 years ! It may be outdated'] = 'Ce plu
 $lang['This plugin has no recent update'] = 'Ce plugin n\'a pas de mise à jour récente';
 $lang['This plugin was updated less than 6 months ago'] = 'Ce plugin a eu une mise à jour il y a moins de 6 mois';
 $lang['This plugin have been updated recently'] = 'Ce plugin a été mis à jour récemment';
+$lang['Current Version'] = 'Version actuelle';
+$lang['More information'] = 'Plus d\'information';

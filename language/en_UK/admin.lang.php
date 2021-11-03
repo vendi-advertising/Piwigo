@@ -1252,5 +1252,7 @@ $lang['This plugin have no update since 3 years ! It may be outdated'] = 'This p
 $lang['This plugin has no recent update'] = 'This plugin has no recent update';
 $lang['This plugin was updated less than 6 months ago'] = 'This plugin was updated less than 6 months ago';
 $lang['This plugin have been updated recently'] = 'This plugin have been updated recently';
+$lang['Current Version'] = 'Current Version';
+$lang['More information'] = 'More information';
 
 // Leave this line empty
