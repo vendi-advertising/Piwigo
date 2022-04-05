@@ -5484,13 +5484,15 @@ color:#FF7B00;
 
 .AddUserPopInContainer,
 .AddAlbumPopInContainer,
-.DeleteAlbumPopInContainer {
+.DeleteAlbumPopInContainer,
+.RenameAlbumPopInContainer {
   background-color: white;
 }
 
 .AddUserPopInContainer .AddIconTitle,
 .AddAlbumPopInContainer .AddIconTitle,
-.DeleteAlbumPopInContainer .DeleteIconTitle  {
+.DeleteAlbumPopInContainer .DeleteIconTitle,
+.RenameAlbumPopInContainer .RenameAlbumTitle  {
   color: #000000;
 }
 
@@ -5502,7 +5504,8 @@ color:#FF7B00;
 
 .AddUserPopInContainer .AddUserInput,
 .AddAlbumPopInContainer .AddAlbumInput,
-.DeleteAlbumPopInContainer .DeleteAlbumInput {
+.DeleteAlbumPopInContainer .DeleteAlbumInput,
+.RenameAlbumPopInContainer .RenameAlbumInput {
   background-color:white;
   border: solid 2px #D4D4D4;
 }
