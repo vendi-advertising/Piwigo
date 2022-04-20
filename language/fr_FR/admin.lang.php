@@ -1258,3 +1258,5 @@ $lang['Advanced features'] = 'Fonctionnalités avancées';
 $lang['Global Gallery Actions'] = 'Actions sur la gallerie';
 $lang['Purge Actions'] = 'Actions de purge';
 $lang['Purge Cache'] = 'Purger le cache';
+$lang['Create a new album at root'] = 'Créer un nouvel album à la racine';
+$lang['Create a sub-album of "%s"'] = 'Créer un sous-album de "%s"';
