@@ -1,4 +1,4 @@
-<?php
+\<?php
 // +-----------------------------------------------------------------------+
 // | This file is part of Piwigo.                                          |
 // |                                                                       |
@@ -7,8 +7,7 @@
 // +-----------------------------------------------------------------------+
 
 //--------------------------------------------------------------------- include
-define('PHPWG_ROOT_PATH','./');
-include_once( PHPWG_ROOT_PATH.'include/common.inc.php' );
+require_once './include/common.inc.php';
 include(PHPWG_ROOT_PATH.'include/section_init.inc.php');
 
 // Check Access and exit when user status is not ok
@@ -221,7 +220,7 @@ if ( empty($page['is_external']) )
       $tag['URL'] = make_index_url(array('tags'=>array($tag)));
       $template->append( 'tag_search_results', $tag);
     }
-    
+
     if (empty($page['items']))
     {
       $template->append( 'no_search_results', htmlspecialchars($page['qsearch_details']['q']));
@@ -240,7 +239,7 @@ if ( empty($page['is_external']) )
   {
     $preferred_image_orders = get_category_preferred_image_orders();
     $order_idx = pwg_get_session_var( 'image_order', 0 );
-    
+
     // get first order field and direction
     $first_order = substr($conf['order_by'], 9);
     if (($pos = strpos($first_order, ',')) !== false)
@@ -248,14 +247,14 @@ if ( empty($page['is_external']) )
       $first_order = substr($first_order, 0, $pos);
     }
     $first_order = trim($first_order);
-    
+
     $url = add_url_params(
             duplicate_index_url(),
             array('image_order' => '')
           );
     $tpl_orders = array();
     $order_selected = false;
-    
+
     foreach ($preferred_image_orders as $order_id => $order)
     {
       if ($order[2])
@@ -266,7 +265,7 @@ if ( empty($page['is_external']) )
           $order_idx = $order_id;
           $order_selected = true;
         }
-        
+
         $tpl_orders[ $order_id ] = array(
           'DISPLAY' => $order[0],
           'URL' => $url.$order_id,
@@ -274,7 +273,7 @@ if ( empty($page['is_external']) )
           );
       }
     }
-    
+
     $tpl_orders[0]['SELECTED'] = !$order_selected; // unselect "Default" if another one is selected
     $template->assign('image_orders', $tpl_orders);
   }

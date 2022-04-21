@@ -6,10 +6,12 @@
 // | file that was distributed with this source code.                      |
 // +-----------------------------------------------------------------------+
 
-defined('PHPWG_ROOT_PATH') or trigger_error('Hacking attempt!', E_USER_ERROR);
-
 // determine the initial instant to indicate the generation time of this page
 $t2 = microtime(true);
+
+require_once __DIR__ . '/autoload.php';
+
+defined('PHPWG_ROOT_PATH') or trigger_error('Hacking attempt!', E_USER_ERROR);
 
 // @set_magic_quotes_runtime(0); // Disable magic_quotes_runtime
 
@@ -99,8 +101,6 @@ if ($conf['session_gc_probability'] > 0)
 include(PHPWG_ROOT_PATH . 'include/constants.php');
 include(PHPWG_ROOT_PATH . 'include/functions.inc.php');
 include(PHPWG_ROOT_PATH . 'include/template.class.php');
-include(PHPWG_ROOT_PATH . 'include/cache.class.php');
-include(PHPWG_ROOT_PATH . 'include/Logger.class.php');
 
 $persistent_cache = new PersistentFileCache();
 

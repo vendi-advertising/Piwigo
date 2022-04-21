@@ -32,7 +32,6 @@ function make_consecutive( &$orders, $step=50 )
   }
 }
 
-include_once(PHPWG_ROOT_PATH.'include/block.class.php');
 
 // +-----------------------------------------------------------------------+
 // | tabs                                                                  |

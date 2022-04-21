@@ -279,7 +279,7 @@ jQuery(document).ready(function(){
 
   <p class="afterUploadActions" style="margin:10px; display:none;"> <a class="batchLink icon-pencil"></a><span class="buttonSeparator">{'or'|translate}</span><a href="admin.php?page=photos_add" class="icon-plus-circled">{'Add another set of photos'|@translate}</a></p>
 
-{if count($setup_errors) > 0}
+{if $setup_errors && count($setup_errors) > 0}
 <div class="errors">
   <ul>
   {foreach from=$setup_errors item=error}
@@ -288,7 +288,7 @@ jQuery(document).ready(function(){
   </ul>
 </div>
 {else}
-  {if count($setup_warnings) > 0}
+  {if $setup_warnings && count($setup_warnings) > 0}
 <div class="warnings">
   <ul>
     {foreach from=$setup_warnings item=warning}
