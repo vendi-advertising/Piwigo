@@ -123,7 +123,7 @@ UPDATE '.USER_INFOS_TABLE.'
     }
     $target_charset = strtolower($target_charset);
 
-    $dir = opendir(PHPWG_ROOT_PATH.'language');
+    $dir = opendir(PHPWG_ROOT_PATH.'/language');
     while ($file = readdir($dir))
     {
       if ($file!='.' and $file!='..')

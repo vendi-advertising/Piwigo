@@ -5,38 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="655155a7-3127-4e62-a82f-417c4b2efeac" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Piwigo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Piwigo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/functions_user.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/functions_user.inc.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/phpmailer/Exception.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/phpmailer/OAuth.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/phpmailer/PHPMailer.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/phpmailer/POP3.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/phpmailer/SMTP.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/random_compat/byte_safe_strings.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/random_compat/cast_to_int.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/random_compat/error_polyfill.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/random_compat/random.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/random_compat/random_bytes_com_dotnet.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/random_compat/random_bytes_dev_urandom.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/random_compat/random_bytes_libsodium.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/random_compat/random_bytes_libsodium_legacy.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/random_compat/random_bytes_mcrypt.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/random_compat/random_int.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CalendarBase.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/CalendarBase.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CalendarMonthly.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/CalendarMonthly.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CalendarWeekly.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/CalendarWeekly.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Logger.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Logger.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/include/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/include/functions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/include/languages.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Admin/languages.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/autoload.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/autoload.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/common.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/common.inc.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/jshrink.class.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/install.php" beforeDir="false" afterPath="$PROJECT_DIR$/install.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/install/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/install/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/local/config/database.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/local/config/database.inc.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FileCombiner.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/FileCombiner.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Template.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Template.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings">
+  <component name="ComposerSettings" doNotAsk="true">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
@@ -75,27 +62,21 @@
     <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "F:/dev/Piwigo",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "web-ide.project.structure",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/dev/Piwigo&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;web-ide.project.structure&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager">
-    <configuration default="true" type="ComposerRunConfigurationType" factoryName="Composer Script">
-      <option name="pathToComposerJson" value="$PROJECT_DIR$/composer.json" />
-      <method v="2" />
-    </configuration>
-  </component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -105,7 +86,8 @@
       <option name="presentableId" value="Default" />
       <updated>1650496200739</updated>
       <workItem from="1650496202021" duration="3581000" />
-      <workItem from="1650580007735" duration="7500000" />
+      <workItem from="1650580007735" duration="7940000" />
+      <workItem from="1650662950936" duration="1732000" />
     </task>
     <servers />
   </component>

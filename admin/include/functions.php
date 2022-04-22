@@ -10,7 +10,7 @@
  * @package functions\admin\___
  */
 
-include_once(PHPWG_ROOT_PATH.'admin/include/functions_metadata.php');
+require PHPWG_ROOT_PATH.'/admin/include/functions_metadata.php';
 
 
 /**

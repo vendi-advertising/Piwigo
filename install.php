@@ -6,8 +6,7 @@
 // | file that was distributed with this source code.                      |
 // +-----------------------------------------------------------------------+
 
-//----------------------------------------------------------- include
-define('PHPWG_ROOT_PATH','./');
+require_once __DIR__.'/include/autoload.php';
 
 // @set_magic_quotes_runtime(0); // Disable magic_quotes_runtime
 //
@@ -90,12 +89,14 @@ else
   $prefixeTable = DEFAULT_PREFIX_TABLE;
 }
 
-include(PHPWG_ROOT_PATH . 'include/config_default.inc.php');
-@include(PHPWG_ROOT_PATH. 'local/config/config.inc.php');
+require PHPWG_ROOT_PATH . '/include/config_default.inc.php';
+if (file_exists(PHPWG_ROOT_PATH.'/local/config/config.inc.php')) {
+  require PHPWG_ROOT_PATH.'/local/config/config.inc.php';
+}
 defined('PWG_LOCAL_DIR') or define('PWG_LOCAL_DIR', 'local/');
 
-include(PHPWG_ROOT_PATH . 'include/functions.inc.php');
-include(PHPWG_ROOT_PATH . 'include/template.class.php');
+require PHPWG_ROOT_PATH . '/include/functions.inc.php';
+require PHPWG_ROOT_PATH . '/include/template.class.php';
 
 // download database config file if exists
 check_input_parameter('dl', $_GET, false, '/^[a-f0-9]{32}$/');
@@ -120,19 +121,14 @@ $dbpasswd = (!empty($_POST['dbpasswd'])) ? $_POST['dbpasswd'] : '';
 $dbname = (!empty($_POST['dbname'])) ? $_POST['dbname'] : '';
 
 // dblayer
-if (extension_loaded('mysqli'))
-{
+if (extension_loaded('mysqli')) {
   $dblayer = 'mysqli';
-}
-else
-{
-  if (version_compare(PHP_VERSION, '7') >= 0)
-  {
+} else {
+  if (version_compare(PHP_VERSION, '7') >= 0) {
     fatal_error('PHP extension "mysqli" is not loaded');
   }
 
-  if (!extension_loaded('mysql'))
-  {
+  if (!extension_loaded('mysql')) {
     fatal_error('No PHP extension installed for mysql, Piwigo needs one');
   }
 
@@ -153,7 +149,7 @@ if (isset($_POST['install']))
 $infos = array();
 $errors = array();
 
-$config_file = PHPWG_ROOT_PATH.PWG_LOCAL_DIR .'config/database.inc.php';
+$config_file = PHPWG_ROOT_PATH.PWG_LOCAL_DIR .'/config/database.inc.php';
 if (@file_exists($config_file))
 {
   include($config_file);
@@ -164,10 +160,9 @@ if (@file_exists($config_file))
   }
 }
 
-include(PHPWG_ROOT_PATH . 'include/constants.php');
-include(PHPWG_ROOT_PATH . 'admin/include/functions.php');
+require PHPWG_ROOT_PATH . '/include/constants.php';
+require PHPWG_ROOT_PATH . '/admin/include/functions.php';
 
-include(PHPWG_ROOT_PATH . 'admin/include/languages.class.php');
 $languages = new languages('utf-8');
 
 if (isset($_GET['language']))
@@ -244,16 +239,16 @@ if (version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<'))
 }
 
 //----------------------------------------------------- template initialization
-$template = new Template(PHPWG_ROOT_PATH.'admin/themes', 'clear');
+$template = new Template(PHPWG_ROOT_PATH.'/admin/themes', 'clear');
 $template->set_filenames( array('install' => 'install.tpl') );
 if (!isset($step))
 {
   $step = 1;
 }
 //---------------------------------------------------------------- form analyze
-include(PHPWG_ROOT_PATH .'include/dblayer/functions_'.$dblayer.'.inc.php');
-include(PHPWG_ROOT_PATH . 'admin/include/functions_install.inc.php');
-include(PHPWG_ROOT_PATH . 'admin/include/functions_upgrade.php');
+require PHPWG_ROOT_PATH .'/include/dblayer/functions_'.$dblayer.'.inc.php';
+require PHPWG_ROOT_PATH . '/admin/include/functions_install.inc.php';
+require PHPWG_ROOT_PATH . '/admin/include/functions_upgrade.php';
 
 if (isset($_POST['install']))
 {
@@ -430,6 +425,7 @@ INSERT INTO '.$prefixeTable.'config (param,value,comment)
 }
 
 //------------------------------------------------------ start template output
+$languages_options = [];
 foreach ($languages->fs_languages as $language_code => $fs_language)
 {
   if ($language == $language_code)
@@ -495,7 +491,7 @@ else
     // email notification
     if (isset($_POST['send_credentials_by_mail']))
     {
-      include_once(PHPWG_ROOT_PATH.'include/functions_mail.inc.php');
+      require PHPWG_ROOT_PATH.'/include/functions_mail.inc.php';
             
       $keyargs_content = array(
         get_l10n_args('Hello %s,', $admin_name),
@@ -534,4 +530,3 @@ if (count($infos) != 0 )
 
 //----------------------------------------------------------- html code display
 $template->pparse('install');
-?>

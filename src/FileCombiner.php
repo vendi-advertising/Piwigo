@@ -1,5 +1,7 @@
 <?php
 
+use Webmozart\PathUtil\Path;
+
 /**
  * Allows merging of javascript and css files into a single one.
  */
@@ -28,11 +30,11 @@ final class FileCombiner
      */
     static function clear_combined_files()
     {
-        $dir = opendir(PHPWG_ROOT_PATH.PWG_COMBINED_DIR);
+        $dir = opendir(Path::join(PHPWG_ROOT_PATH, PWG_COMBINED_DIR));
         while ($file = readdir($dir))
         {
             if ( get_extension($file)=='js' || get_extension($file)=='css')
-                unlink(PHPWG_ROOT_PATH.PWG_COMBINED_DIR.$file);
+                unlink(Path::join(PHPWG_ROOT_PATH, PWG_COMBINED_DIR, $file));
         }
         closedir($dir);
     }
@@ -88,7 +90,7 @@ final class FileCombiner
             $key[] = $combinable->path;
             $key[] = $combinable->version;
             if ($conf['template_compile_check'])
-                $key[] = filemtime( PHPWG_ROOT_PATH . $combinable->path );
+                $key[] = filemtime(Path::join(PHPWG_ROOT_PATH, $combinable->path));
             $pending[] = $combinable;
         }
         $this->flush_pending($result, $pending, $key, $force);
@@ -109,7 +111,7 @@ final class FileCombiner
         {
             $key = join('>', $key);
             $file = PWG_COMBINED_DIR . base_convert(crc32($key),10,36) . '.' . $this->type;
-            if ($force || !file_exists(PHPWG_ROOT_PATH.$file) )
+            if ($force || !file_exists(Path::join(PHPWG_ROOT_PATH,$file) ))
             {
                 $output = '';
                 $header = '';
@@ -120,9 +122,9 @@ final class FileCombiner
                     $output .= "\n";
                 }
                 $output = "/*BEGIN header */\n" . $header . "\n" . $output;
-                mkgetdir( dirname(PHPWG_ROOT_PATH.$file) );
-                file_put_contents( PHPWG_ROOT_PATH.$file, $output );
-                @chmod(PHPWG_ROOT_PATH.$file, 0644);
+                mkgetdir( dirname(Path::join(PHPWG_ROOT_PATH,$file)) );
+                file_put_contents(Path::join( PHPWG_ROOT_PATH,$file), $output );
+                @chmod(Path::join(PHPWG_ROOT_PATH,$file), 0644);
             }
             $result[] = new Combinable("combi", $file, false);
         }
@@ -156,9 +158,9 @@ final class FileCombiner
             {
                 $key = array($combinable->path, $combinable->version);
                 if ($conf['template_compile_check'])
-                    $key[] = filemtime( PHPWG_ROOT_PATH . $combinable->path );
+                    $key[] = filemtime( Path::join( PHPWG_ROOT_PATH , $combinable->path ));
                 $file = PWG_COMBINED_DIR . 't' . base_convert(crc32(implode(',',$key)),10,36) . '.' . $this->type;
-                if (!$force && file_exists(PHPWG_ROOT_PATH.$file) )
+                if (!$force && file_exists(Path::join( PHPWG_ROOT_PATH,$file) ))
                 {
                     $combinable->path = $file;
                     $combinable->version = false;
@@ -168,7 +170,7 @@ final class FileCombiner
 
             global $template;
             $handle = $this->type. '.' .$combinable->id;
-            $template->set_filename($handle, realpath(PHPWG_ROOT_PATH.$combinable->path));
+            $template->set_filename($handle, realpath(Path::join( PHPWG_ROOT_PATH,$combinable->path)));
             trigger_notify( 'combinable_preparse', $template, $combinable, $this); //allow themes and plugins to set their own vars to template ...
             $content = $template->parse($handle, true);
 
@@ -179,12 +181,12 @@ final class FileCombiner
 
             if ($return_content)
                 return $content;
-            file_put_contents( PHPWG_ROOT_PATH.$file, $content );
+            file_put_contents( Path::join( PHPWG_ROOT_PATH,$file), $content );
             $combinable->path = $file;
         }
         elseif ($return_content)
         {
-            $content = file_get_contents(PHPWG_ROOT_PATH . $combinable->path);
+            $content = file_get_contents(Path::join( PHPWG_ROOT_PATH . $combinable->path));
             if ($this->is_css)
                 $content = self::process_css($content, $combinable->path, $header );
             else
@@ -204,7 +206,6 @@ final class FileCombiner
     {
         if (strpos($file, '.min')===false and strpos($file, '.packed')===false )
         {
-            require_once(PHPWG_ROOT_PATH.'include/jshrink.class.php');
             try { $js = JShrink\Minifier::minify($js); } catch(Exception $e) {}
         }
         return trim($js, " \t\r\n;").";\n";
@@ -224,7 +225,7 @@ final class FileCombiner
         $css = self::process_css_rec($css, dirname($file), $header);
         if (strpos($file, '.min')===false and version_compare(PHP_VERSION, '5.2.4', '>='))
         {
-            require_once(PHPWG_ROOT_PATH.'include/cssmin.class.php');
+            require_once PHPWG_ROOT_PATH.'/include/cssmin.class.php';
             $css = CssMin::minify($css, array('Variables'=>false));
         }
         $css = trigger_change('combined_css_postfilter', $css);
@@ -271,7 +272,7 @@ final class FileCombiner
                 if (
                     strpos($match[1], '..') !== false // Possible attempt to get out of Piwigo's dir
                     or strpos($match[1], '://') !== false // Remote URL
-                    or !is_readable(PHPWG_ROOT_PATH . $dir . '/' . $match[1])
+                    or !is_readable(Path::join(PHPWG_ROOT_PATH, $dir, $match[1]))
                 )
                 {
                     // If anything is suspicious, don't try to process the
@@ -283,7 +284,7 @@ final class FileCombiner
                 }
                 else
                 {
-                    $sub_css = file_get_contents(PHPWG_ROOT_PATH . $dir . "/$match[1]");
+                    $sub_css = file_get_contents(Path::join(PHPWG_ROOT_PATH, $dir, "/$match[1]"));
                     $replace[] = self::process_css_rec($sub_css, dirname($dir . "/$match[1]"), $header);
                 }
             }

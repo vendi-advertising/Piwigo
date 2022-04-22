@@ -71,15 +71,14 @@ if (file_exists(PHPWG_ROOT_PATH.'/local/config/config.inc.php')) {
     require PHPWG_ROOT_PATH.'/local/config/config.inc.php';
 }
 
-
 defined('PWG_LOCAL_DIR') or define('PWG_LOCAL_DIR', 'local/');
 
 require Path::join(PHPWG_ROOT_PATH, PWG_LOCAL_DIR.'config/database.inc.php');
 if (!defined('PHPWG_INSTALLED')) {
-    die('INSTALLED');
     header('Location: install.php');
     exit;
 }
+
 require Path::join(PHPWG_ROOT_PATH, 'include/dblayer/', 'functions_'.$conf['dblayer'].'.inc.php');
 
 if (isset($conf['show_php_errors']) && !empty($conf['show_php_errors'])) {

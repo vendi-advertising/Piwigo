@@ -1122,6 +1122,8 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
         if (!isset($themeconfs[$dir]))
         {
             $themeconf = array();
+//            debug_print_backtrace();
+//            die;
             include($dir.'/themeconf.inc.php');
             // Put themeconf in cache
             $themeconfs[$dir] = $themeconf;
