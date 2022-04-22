@@ -48,8 +48,9 @@ function pwg_db_connect($host, $user, $password, $database)
   }
 
   $dbname = null;
-  
-  $mysqli = new mysqli($host, $user, $password, $dbname, $port, $socket);
+
+  // TODO: This isn't a good idea probably
+  @$mysqli = new mysqli($host, $user, $password, $dbname, $port, $socket);
   if (mysqli_connect_error())
   {
     throw new Exception("Can't connect to server");
@@ -834,9 +835,16 @@ function pwg_db_date_to_ts($date)
  */
 function my_error($header, $die)
 {
-  global $mysqli;
-  
-  $error = "[mysql error ".$mysqli->errno.'] '.$mysqli->error."\n";
+  /** @var mysqli $mysqli */
+  global  $mysqli;
+
+  /* check connection first */
+  if ($mysqli->connect_errno) {
+    $error = "[mysql connect error ".$mysqli->connect_errno.'] '.$mysqli->connect_error."\n";
+  } else {
+    $error = "[mysql error ".$mysqli->errno.'] '.$mysqli->error."\n";
+  }
+
   $error .= $header;
 
   if ($die)

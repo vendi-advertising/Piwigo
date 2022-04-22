@@ -1,4 +1,4 @@
-\<?php
+<?php
 // +-----------------------------------------------------------------------+
 // | This file is part of Piwigo.                                          |
 // |                                                                       |
@@ -8,11 +8,10 @@
 
 //--------------------------------------------------------------------- include
 require_once './include/common.inc.php';
-include(PHPWG_ROOT_PATH.'include/section_init.inc.php');
+require PHPWG_ROOT_PATH.'include/section_init.inc.php';
 
 // Check Access and exit when user status is not ok
 check_status(ACCESS_GUEST);
-
 
 // access authorization check
 if (isset($page['category']))

@@ -920,4 +920,3 @@ $conf['proxy_server'] = 'proxy.domain.org:port';
 // If the http-proxy requires authentication, set username and password here
 // e.g. username:password
 $conf['proxy_auth'] = '';
-?>
