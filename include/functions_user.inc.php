@@ -6,6 +6,8 @@
 // | file that was distributed with this source code.                      |
 // +-----------------------------------------------------------------------+
 
+use Ozh\Phpass\PasswordHash;
+
 /**
  * @package functions\user
  */
@@ -997,8 +999,6 @@ function pwg_password_hash($password)
 
   if (empty($pwg_hasher))
   {
-    require_once(PHPWG_ROOT_PATH.'include/passwordhash.class.php');
-
     // We use the portable hash feature from phpass because we can't be sure
     // Piwigo runs on PHP 5.3+ (and won't run on an older version in the
     // future)
@@ -1057,7 +1057,6 @@ function pwg_password_verify($password, $hash, $user_id=null)
   // new style phpass portable hash.
   if (empty($pwg_hasher))
   {
-    require_once(PHPWG_ROOT_PATH.'include/passwordhash.class.php');
 
     // We use the portable hash feature
     $pwg_hasher = new PasswordHash(13, true);

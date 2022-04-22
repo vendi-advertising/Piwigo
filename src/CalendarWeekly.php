@@ -10,8 +10,6 @@
  * @package functions\calendar
  */
 
-include_once(PHPWG_ROOT_PATH.'include/calendar_base.class.php');
-
 /**
  * Weekly calendar style (composed of years/week in years and days in week)
  */
@@ -117,5 +115,3 @@ class CalendarWeekly extends CalendarBase
     return $res;
   }
 }
-
-?>

@@ -365,5 +365,3 @@ GROUP BY period';
     }
   }
 }
-
-?>

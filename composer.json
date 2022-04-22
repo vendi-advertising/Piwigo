@@ -2,6 +2,9 @@
   "require": {
     "webmozart/path-util": "^2.3",
     "smarty/smarty": "3.1.39",
-    "ext-mysqli": "*"
+    "ext-mysqli": "*",
+    "paragonie/random_compat": ">=2",
+    "phpmailer/phpmailer": "6.5.1",
+    "ozh/phpass": "^1.4"
   }
 }

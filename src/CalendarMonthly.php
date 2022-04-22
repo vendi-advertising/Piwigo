@@ -7,12 +7,6 @@
 // +-----------------------------------------------------------------------+
 
 /**
- * @package functions\calendar
- */
-
-include_once(PHPWG_ROOT_PATH.'include/calendar_base.class.php');
-
-/**
  * Monthly calendar style (composed of years/months and days)
  */
 class CalendarMonthly extends CalendarBase
@@ -470,5 +464,3 @@ class CalendarMonthly extends CalendarBase
     return true;
   }
 }
-
-?>
