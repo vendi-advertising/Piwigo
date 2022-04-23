@@ -24,6 +24,12 @@
  * table, other parameters are in config_*.inc.php
  */
 
+use Webmozart\PathUtil\Path;
+
+if(!isset($conf)){
+    $conf = [];
+}
+
 // +-----------------------------------------------------------------------+
 // |                                 misc                                  |
 // +-----------------------------------------------------------------------+
@@ -811,7 +817,7 @@ $conf['upload_dir'] = './upload';
 $conf['no_photo_yet_url'] = 'admin.php?page=photos_add';
 
 // directory with themes inside
-$conf['themes_dir'] = PHPWG_ROOT_PATH.'themes';
+$conf['themes_dir'] = Path::join( PHPWG_ROOT_PATH,'themes');
 
 // enable the synchronization method for adding photos
 $conf['enable_synchronization'] = true;
@@ -837,7 +843,7 @@ $conf['upload_form_automatic_rotation'] = true;
 // 0-'auto', 1-'derivative' 2-'script'
 $conf['derivative_url_style']=0;
 
-$conf['chmod_value']= substr_compare(PHP_SAPI, 'apa', 0, 3)==0 ? 0777 : 0755;
+$conf['chmod_value'] = 0 === substr_compare(PHP_SAPI, 'apa', 0, 3) ? 0777 : 0755;
 
 // 'small', 'medium' or 'large'
 $conf['derivative_default_size'] = 'medium';

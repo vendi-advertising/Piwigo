@@ -239,5 +239,3 @@ class c13y_internal
     return $result;
   }
 }
-
-?>

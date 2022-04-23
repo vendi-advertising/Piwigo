@@ -1,3 +1,5 @@
 /vendor/
 /_data/
 /upload/
+/local/config/config.inc.php
+/local/config/database.inc.php

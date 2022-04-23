@@ -7,39 +7,13 @@
 // +-----------------------------------------------------------------------+
 
 // determine the initial instant to indicate the generation time of this page
-use Webmozart\PathUtil\Path;
 
 $t2 = microtime(true);
 
 require_once __DIR__.'/autoload.php';
+require_once __DIR__.'/functions_vendi.php';
 
-defined('PHPWG_ROOT_PATH') or trigger_error('Hacking attempt!', E_USER_ERROR);
-
-// @set_magic_quotes_runtime(0); // Disable magic_quotes_runtime
-
-//
-// addslashes to vars if magic_quotes_gpc is off this is a security
-// precaution to prevent someone trying to break out of a SQL statement.
-//
-if (function_exists('get_magic_quotes_gpc') && !@get_magic_quotes_gpc()) {
-    function sanitize_mysql_kv(&$v, $k)
-    {
-        $v = addslashes($v);
-    }
-
-    if (is_array($_GET)) {
-        array_walk_recursive($_GET, 'sanitize_mysql_kv');
-    }
-    if (is_array($_POST)) {
-        array_walk_recursive($_POST, 'sanitize_mysql_kv');
-    }
-    if (is_array($_COOKIE)) {
-        array_walk_recursive($_COOKIE, 'sanitize_mysql_kv');
-    }
-}
-if (!empty($_SERVER["PATH_INFO"])) {
-    $_SERVER["PATH_INFO"] = addslashes($_SERVER["PATH_INFO"]);
-}
+fix_global_variables();
 
 //
 // Define some basic configuration arrays this also prevents malicious
@@ -60,26 +34,20 @@ $header_msgs = array();
 $header_notes = array();
 $filter = array();
 
-foreach (['gzopen',] as $func) {
-    if (!function_exists($func)) {
-        require_once Path::join(PHPWG_ROOT_PATH, '/include/php_compat/', $func.'.php');
-    }
-}
+load_php_compat();
 
-require_once PHPWG_ROOT_PATH.'/include/config_default.inc.php';
-if (file_exists(PHPWG_ROOT_PATH.'/local/config/config.inc.php')) {
-    require PHPWG_ROOT_PATH.'/local/config/config.inc.php';
-}
-
+require_from_include('config_default.inc.php');
+maybe_require_from_local('config/config.inc.php');
 defined('PWG_LOCAL_DIR') or define('PWG_LOCAL_DIR', 'local/');
-
-require Path::join(PHPWG_ROOT_PATH, PWG_LOCAL_DIR.'config/database.inc.php');
+maybe_require_from_local('config/database.inc.php');
 if (!defined('PHPWG_INSTALLED')) {
     header('Location: install.php');
     exit;
 }
 
-require Path::join(PHPWG_ROOT_PATH, 'include/dblayer/', 'functions_'.$conf['dblayer'].'.inc.php');
+die('INSTALLED!');
+
+require_from_include('dblayer/functions_'.$conf['dblayer'].'.inc.php');
 
 if (isset($conf['show_php_errors']) && !empty($conf['show_php_errors'])) {
     @ini_set('error_reporting', $conf['show_php_errors']);

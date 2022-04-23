@@ -15,7 +15,7 @@ define('PHPWG_DEFAULT_LANGUAGE', 'en_UK');
 // default value (see file install/piwigo_structure-mysql.sql)
 define('PHPWG_DEFAULT_TEMPLATE', 'modus');
 
-define('PHPWG_THEMES_PATH', $conf['themes_dir'].'/');
+define('PHPWG_THEMES_PATH', $conf['themes_dir']);
 defined('PWG_COMBINED_DIR') or define('PWG_COMBINED_DIR', $conf['data_location'].'combined/');
 defined('PWG_DERIVATIVE_DIR') or define('PWG_DERIVATIVE_DIR', $conf['data_location'].'i/');
 
@@ -102,5 +102,3 @@ if (!defined('ACTIVITY_TABLE'))
   define('ACTIVITY_TABLE', $prefixeTable.'activity');
 if (!defined('LOUNGE_TABLE'))
   define('LOUNGE_TABLE', $prefixeTable.'lounge');
-
-?>

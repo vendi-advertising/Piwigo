@@ -13,6 +13,9 @@ spl_autoload_register(
                 PHPWG_ROOT_PATH.'/src/',
                 PHPWG_ROOT_PATH.'/src/Admin/',
             ],
+            'App\\' => [
+                PHPWG_ROOT_PATH.'/src/App/',
+            ],
         ];
 
         foreach ($prefixes as $prefix => $base_dirs) {

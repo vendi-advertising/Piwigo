@@ -327,5 +327,3 @@ class check_integrity
   }
 
 }
-
-?>

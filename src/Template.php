@@ -1,5 +1,7 @@
 <?php
 
+use Webmozart\PathUtil\Path;
+
 /**
  * This a wrapper around Smarty classes proving various custom mechanisms for templates.
  */
@@ -43,7 +45,7 @@ class Template
      * @var string $theme
      * @var string $path
      */
-    function __construct($root=".", $theme="", $path="template")
+    function __construct($root = ".", $theme = "", $path = "template")
     {
         global $conf, $lang_info;
 
@@ -53,19 +55,16 @@ class Template
         $this->cssLoader = new CssLoader;
         $this->smarty = new Smarty;
         $this->smarty->debugging = $conf['debug_template'];
-        if (!$this->smarty->debugging)
-        {
+        if (!$this->smarty->debugging) {
             $this->smarty->error_reporting = error_reporting() & ~E_NOTICE;
         }
         $this->smarty->compile_check = $conf['template_compile_check'];
         $this->smarty->force_compile = $conf['template_force_compile'];
 
-        if (!isset($conf['data_dir_checked']))
-        {
-            $dir = PHPWG_ROOT_PATH.$conf['data_location'];
-            mkgetdir($dir, MKGETDIR_DEFAULT&~MKGETDIR_DIE_ON_ERROR);
-            if (!is_writable($dir))
-            {
+        if (!isset($conf['data_dir_checked'])) {
+            $dir = Path::join(PHPWG_ROOT_PATH, $conf['data_location']);
+            mkgetdir($dir, MKGETDIR_DEFAULT & ~MKGETDIR_DIE_ON_ERROR);
+            if (!is_writable($dir)) {
                 load_language('admin.lang');
                 fatal_error(
                     l10n(
@@ -81,57 +80,51 @@ class Template
             }
         }
 
-        $compile_dir = PHPWG_ROOT_PATH.$conf['data_location'].'templates_c';
-        mkgetdir( $compile_dir );
+        $compile_dir = Path::join(PHPWG_ROOT_PATH, $conf['data_location'], 'templates_c');
+        mkgetdir($compile_dir);
 
         $this->smarty->setCompileDir($compile_dir);
 
-        $this->smarty->assign( 'pwg', new PwgTemplateAdapter() );
-        $this->smarty->registerPlugin('modifiercompiler', 'translate', array('Template', 'modcompiler_translate') );
-        $this->smarty->registerPlugin('modifiercompiler', 'translate_dec', array('Template', 'modcompiler_translate_dec') );
-        $this->smarty->registerPlugin('modifier', 'explode', array('Template', 'mod_explode') );
-        $this->smarty->registerPlugin('modifier', 'ternary', array('Template', 'mod_ternary') );
-        $this->smarty->registerPlugin('modifier', 'get_extent', array($this, 'get_extent') );
-        $this->smarty->registerPlugin('block', 'html_head', array($this, 'block_html_head') );
-        $this->smarty->registerPlugin('block', 'html_style', array($this, 'block_html_style') );
-        $this->smarty->registerPlugin('function', 'combine_script', array($this, 'func_combine_script') );
-        $this->smarty->registerPlugin('function', 'get_combined_scripts', array($this, 'func_get_combined_scripts') );
-        $this->smarty->registerPlugin('function', 'combine_css', array($this, 'func_combine_css') );
-        $this->smarty->registerPlugin('function', 'define_derivative', array($this, 'func_define_derivative') );
-        $this->smarty->registerPlugin('compiler', 'get_combined_css', array($this, 'func_get_combined_css') );
-        $this->smarty->registerPlugin('block', 'footer_script', array($this, 'block_footer_script') );
-        $this->smarty->registerFilter('pre', array('Template', 'prefilter_white_space') );
-        if ( $conf['compiled_template_cache_language'] )
-        {
-            $this->smarty->registerFilter('post', array('Template', 'postfilter_language') );
+        $this->smarty->assign('pwg', new PwgTemplateAdapter());
+        $this->smarty->registerPlugin('modifiercompiler', 'translate', array('Template', 'modcompiler_translate'));
+        $this->smarty->registerPlugin('modifiercompiler', 'translate_dec', array('Template', 'modcompiler_translate_dec'));
+        $this->smarty->registerPlugin('modifier', 'explode', array('Template', 'mod_explode'));
+        $this->smarty->registerPlugin('modifier', 'ternary', array('Template', 'mod_ternary'));
+        $this->smarty->registerPlugin('modifier', 'get_extent', array($this, 'get_extent'));
+        $this->smarty->registerPlugin('block', 'html_head', array($this, 'block_html_head'));
+        $this->smarty->registerPlugin('block', 'html_style', array($this, 'block_html_style'));
+        $this->smarty->registerPlugin('function', 'combine_script', array($this, 'func_combine_script'));
+        $this->smarty->registerPlugin('function', 'get_combined_scripts', array($this, 'func_get_combined_scripts'));
+        $this->smarty->registerPlugin('function', 'combine_css', array($this, 'func_combine_css'));
+        $this->smarty->registerPlugin('function', 'define_derivative', array($this, 'func_define_derivative'));
+        $this->smarty->registerPlugin('compiler', 'get_combined_css', array($this, 'func_get_combined_css'));
+        $this->smarty->registerPlugin('block', 'footer_script', array($this, 'block_footer_script'));
+        $this->smarty->registerFilter('pre', array('Template', 'prefilter_white_space'));
+        if ($conf['compiled_template_cache_language']) {
+            $this->smarty->registerFilter('post', array('Template', 'postfilter_language'));
         }
 
         $this->smarty->setTemplateDir(array());
-        if ( !empty($theme) )
-        {
+        if (!empty($theme)) {
             $this->set_theme($root, $theme, $path);
-            if (!defined('IN_ADMIN'))
-            {
-                $this->set_prefilter( 'header', array('Template', 'prefilter_local_css') );
+            if (!defined('IN_ADMIN')) {
+                $this->set_prefilter('header', array('Template', 'prefilter_local_css'));
             }
-        }
-        else
+        } else {
             $this->set_template_dir($root);
+        }
 
-        if (isset($lang_info['code']) and !isset($lang_info['jquery_code']))
-        {
+        if (isset($lang_info['code']) and !isset($lang_info['jquery_code'])) {
             $lang_info['jquery_code'] = $lang_info['code'];
         }
 
-        if (isset($lang_info['jquery_code']) and !isset($lang_info['plupload_code']))
-        {
+        if (isset($lang_info['jquery_code']) and !isset($lang_info['plupload_code'])) {
             $lang_info['plupload_code'] = str_replace('-', '_', $lang_info['jquery_code']);
         }
 
         $this->smarty->assign('lang_info', $lang_info);
 
-        if (!defined('IN_ADMIN') and isset($conf['extents_for_templates']))
-        {
+        if (!defined('IN_ADMIN') and isset($conf['extents_for_templates'])) {
             $tpl_extents = unserialize($conf['extents_for_templates']);
             $this->set_extents($tpl_extents, './template-extension/', true, $theme);
         }
@@ -146,14 +139,13 @@ class Template
      * @param bool $load_css
      * @param bool $load_local_head
      */
-    function set_theme($root, $theme, $path, $load_css=true, $load_local_head=true, $colorscheme='dark')
+    function set_theme($root, $theme, $path, $load_css = true, $load_local_head = true, $colorscheme = 'dark')
     {
         $this->set_template_dir($root.'/'.$theme.'/'.$path);
 
         $themeconf = $this->load_themeconf($root.'/'.$theme);
 
-        if (isset($themeconf['parent']) and $themeconf['parent'] != $theme)
-        {
+        if (isset($themeconf['parent']) and $themeconf['parent'] != $theme) {
             $this->set_theme(
                 $root,
                 $themeconf['parent'],
@@ -167,14 +159,12 @@ class Template
             'id' => $theme,
             'load_css' => $load_css,
         );
-        if (!empty($themeconf['local_head']) and $load_local_head)
-        {
-            $tpl_var['local_head'] = realpath($root.'/'.$theme.'/'.$themeconf['local_head'] );
+        if (!empty($themeconf['local_head']) and $load_local_head) {
+            $tpl_var['local_head'] = realpath($root.'/'.$theme.'/'.$themeconf['local_head']);
         }
         $themeconf['id'] = $theme;
 
-        if (!isset($themeconf['colorscheme']))
-        {
+        if (!isset($themeconf['colorscheme'])) {
             $themeconf['colorscheme'] = $colorscheme;
         }
 
@@ -192,11 +182,10 @@ class Template
     {
         $this->smarty->addTemplateDir($dir);
 
-        if (!isset($this->smarty->compile_id))
-        {
+        if (!isset($this->smarty->compile_id)) {
             $compile_id = "1";
-            $compile_id .= ($real_dir = realpath($dir))===false ? $dir : $real_dir;
-            $this->smarty->compile_id = base_convert(crc32($compile_id), 10, 36 );
+            $compile_id .= ($real_dir = realpath($dir)) === false ? $dir : $real_dir;
+            $this->smarty->compile_id = base_convert(crc32($compile_id), 10, 36);
         }
     }
 
@@ -231,6 +220,7 @@ class Template
     function get_themeconf($val)
     {
         $tc = $this->smarty->getTemplateVars('themeconf');
+
         return isset($tc[$val]) ? $tc[$val] : '';
     }
 
@@ -243,7 +233,7 @@ class Template
      */
     function set_filename($handle, $filename)
     {
-        return $this->set_filenames( array($handle=>$filename) );
+        return $this->set_filenames(array($handle => $filename));
     }
 
     /**
@@ -254,22 +244,18 @@ class Template
      */
     function set_filenames($filename_array)
     {
-        if (!is_array($filename_array))
-        {
+        if (!is_array($filename_array)) {
             return false;
         }
         reset($filename_array);
-        foreach ($filename_array as $handle => $filename)
-        {
-            if (is_null($filename))
-            {
+        foreach ($filename_array as $handle => $filename) {
+            if (is_null($filename)) {
                 unset($this->files[$handle]);
-            }
-            else
-            {
+            } else {
                 $this->files[$handle] = $this->get_extent($filename, $handle);
             }
         }
+
         return true;
     }
 
@@ -283,7 +269,7 @@ class Template
      * @param string $theme
      * @return bool
      */
-    function set_extent($filename, $param, $dir='', $overwrite=true, $theme='N/A')
+    function set_extent($filename, $param, $dir = '', $overwrite = true, $theme = 'N/A')
     {
         return $this->set_extents(array($filename => $param), $dir, $overwrite);
     }
@@ -297,39 +283,32 @@ class Template
      * @param string $theme
      * @return bool
      */
-    function set_extents($filename_array, $dir='', $overwrite=true, $theme='N/A')
+    function set_extents($filename_array, $dir = '', $overwrite = true, $theme = 'N/A')
     {
-        if (!is_array($filename_array))
-        {
+        if (!is_array($filename_array)) {
             return false;
         }
-        foreach ($filename_array as $filename => $value)
-        {
-            if (is_array($value))
-            {
+        foreach ($filename_array as $filename => $value) {
+            if (is_array($value)) {
                 $handle = $value[0];
                 $param = $value[1];
                 $thm = $value[2];
-            }
-            elseif (is_string($value))
-            {
+            } elseif (is_string($value)) {
                 $handle = $value;
                 $param = 'N/A';
                 $thm = 'N/A';
-            }
-            else
-            {
+            } else {
                 return false;
             }
 
-            if ((stripos(implode('',array_keys($_GET)), '/'.$param) !== false or $param == 'N/A')
+            if ((stripos(implode('', array_keys($_GET)), '/'.$param) !== false or $param == 'N/A')
                 and ($thm == $theme or $thm == 'N/A')
                 and (!isset($this->extents[$handle]) or $overwrite)
-                and file_exists($dir . $filename))
-            {
-                $this->extents[$handle] = realpath($dir . $filename);
+                and file_exists($dir.$filename)) {
+                $this->extents[$handle] = realpath($dir.$filename);
             }
         }
+
         return true;
     }
 
@@ -340,12 +319,12 @@ class Template
      * @param string $handle
      * @return string
      */
-    function get_extent($filename='', $handle='')
+    function get_extent($filename = '', $handle = '')
     {
-        if (isset($this->extents[$handle]))
-        {
+        if (isset($this->extents[$handle])) {
             $filename = $this->extents[$handle];
         }
+
         return $filename;
     }
 
@@ -357,9 +336,9 @@ class Template
      *    (in this case, do not use the _$value_ parameter)
      * @param mixed $value
      */
-    function assign($tpl_var, $value=null)
+    function assign($tpl_var, $value = null)
     {
-        $this->smarty->assign( $tpl_var, $value );
+        $this->smarty->assign($tpl_var, $value);
     }
 
     /**
@@ -374,6 +353,7 @@ class Template
     function assign_var_from_handle($varname, $handle)
     {
         $this->assign($varname, $this->parse($handle, true));
+
         return true;
     }
 
@@ -385,9 +365,9 @@ class Template
      * @param mixed $value
      * @param bool $merge
      */
-    function append($tpl_var, $value=null, $merge=false)
+    function append($tpl_var, $value = null, $merge = false)
     {
-        $this->smarty->append( $tpl_var, $value, $merge );
+        $this->smarty->append($tpl_var, $value, $merge);
     }
 
     /**
@@ -398,8 +378,10 @@ class Template
      */
     function concat($tpl_var, $value)
     {
-        $this->assign($tpl_var,
-            $this->smarty->getTemplateVars($tpl_var) . $value);
+        $this->assign(
+            $tpl_var,
+            $this->smarty->getTemplateVars($tpl_var).$value
+        );
     }
 
     /**
@@ -410,7 +392,7 @@ class Template
      */
     function clear_assign($tpl_var)
     {
-        $this->smarty->clearAssign( $tpl_var );
+        $this->smarty->clearAssign($tpl_var);
     }
 
     /**
@@ -419,9 +401,9 @@ class Template
      *
      * @param string $tpl_var
      */
-    function get_template_vars($tpl_var=null)
+    function get_template_vars($tpl_var = null)
     {
-        return $this->smarty->getTemplateVars( $tpl_var );
+        return $this->smarty->getTemplateVars($tpl_var);
     }
 
     /**
@@ -432,21 +414,19 @@ class Template
      * @param bool $return
      * @return null|string
      */
-    function parse($handle, $return=false)
+    function parse($handle, $return = false)
     {
-        if ( !isset($this->files[$handle]) )
-        {
+        if (!isset($this->files[$handle])) {
             fatal_error("Template->parse(): Couldn't load template file for handle $handle");
         }
 
-        $this->smarty->assign( 'ROOT_URL', get_root_url() );
+        $this->smarty->assign('ROOT_URL', get_root_url());
 
         $save_compile_id = $this->smarty->compile_id;
         $this->load_external_filters($handle);
 
         global $conf, $lang_info;
-        if ( $conf['compiled_template_cache_language'] and isset($lang_info['code']) )
-        {
+        if ($conf['compiled_template_cache_language'] and isset($lang_info['code'])) {
             $this->smarty->compile_id .= '_'.$lang_info['code'];
         }
 
@@ -455,8 +435,7 @@ class Template
         $this->smarty->compile_id = $save_compile_id;
         $this->unload_external_filters($handle);
 
-        if ($return)
-        {
+        if ($return) {
             return $v;
         }
         $this->output .= $v;
@@ -479,61 +458,57 @@ class Template
      */
     function flush()
     {
-        if (!$this->scriptLoader->did_head())
-        {
-            $pos = strpos( $this->output, self::COMBINED_SCRIPTS_TAG );
-            if ($pos !== false)
-            {
+        if (!$this->scriptLoader->did_head()) {
+            $pos = strpos($this->output, self::COMBINED_SCRIPTS_TAG);
+            if ($pos !== false) {
                 $scripts = $this->scriptLoader->get_head_scripts();
                 $content = array();
-                foreach ($scripts as $script)
-                {
-                    $content[]=
+                foreach ($scripts as $script) {
+                    $content[] =
                         '<script type="text/javascript" src="'
-                        . self::make_script_src($script)
+                        .self::make_script_src($script)
                         .'"></script>';
                 }
 
-                $this->output = substr_replace( $this->output, implode( "\n", $content ), $pos, strlen(self::COMBINED_SCRIPTS_TAG) );
+                $this->output = substr_replace($this->output, implode("\n", $content), $pos, strlen(self::COMBINED_SCRIPTS_TAG));
             } //else maybe error or warning ?
         }
 
         $css = $this->cssLoader->get_css();
 
         $content = array();
-        foreach( $css as $combi )
-        {
+        foreach ($css as $combi) {
             $href = embellish_url(get_root_url().$combi->path);
-            if ($combi->version !== false)
-                $href .= '?v' . ($combi->version ? $combi->version : PHPWG_VERSION);
+            if ($combi->version !== false) {
+                $href .= '?v'.($combi->version ? $combi->version : PHPWG_VERSION);
+            }
             // trigger the event for eventual use of a cdn
             $href = trigger_change('combined_css', $href, $combi);
             $content[] = '<link rel="stylesheet" type="text/css" href="'.$href.'">';
         }
-        $this->output = str_replace(self::COMBINED_CSS_TAG,
-            implode( "\n", $content ),
-            $this->output );
+        $this->output = str_replace(
+            self::COMBINED_CSS_TAG,
+            implode("\n", $content),
+            $this->output
+        );
         $this->cssLoader->clear();
 
-        if ( count($this->html_head_elements) || strlen($this->html_style) )
-        {
+        if (count($this->html_head_elements) || strlen($this->html_style)) {
             $search = "\n</head>";
-            $pos = strpos( $this->output, $search );
-            if ($pos !== false)
-            {
-                $rep = "\n".implode( "\n", $this->html_head_elements );
-                if (strlen($this->html_style))
-                {
-                    $rep.='<style type="text/css">'.$this->html_style.'</style>';
+            $pos = strpos($this->output, $search);
+            if ($pos !== false) {
+                $rep = "\n".implode("\n", $this->html_head_elements);
+                if (strlen($this->html_style)) {
+                    $rep .= '<style type="text/css">'.$this->html_style.'</style>';
                 }
-                $this->output = substr_replace( $this->output, $rep, $pos, 0 );
+                $this->output = substr_replace($this->output, $rep, $pos, 0);
             } //else maybe error or warning ?
             $this->html_head_elements = array();
             $this->html_style = '';
         }
 
         echo $this->output;
-        $this->output='';
+        $this->output = '';
     }
 
     /**
@@ -544,12 +519,11 @@ class Template
     {
         $this->flush();
 
-        if ($this->smarty->debugging)
-        {
+        if ($this->smarty->debugging) {
             global $t2;
             $this->smarty->assign(
                 array(
-                    'AAAA_DEBUG_TOTAL_TIME__' => get_elapsed_time($t2, get_moment())
+                    'AAAA_DEBUG_TOTAL_TIME__' => get_elapsed_time($t2, get_moment()),
                 )
             );
             Smarty_Internal_Debug::display_debug($this->smarty);
@@ -564,15 +538,15 @@ class Template
      */
     static function get_php_str_val($str)
     {
-        if (is_string($str) && strlen($str)>1)
-        {
-            if ( ($str[0]=='\'' && $str[strlen($str)-1]=='\'')
-                || ($str[0]=='"' && $str[strlen($str)-1]=='"'))
-            {
+        if (is_string($str) && strlen($str) > 1) {
+            if (($str[0] == '\'' && $str[strlen($str) - 1] == '\'')
+                || ($str[0] == '"' && $str[strlen($str) - 1] == '"')) {
                 eval('$tmp='.$str.';');
+
                 return $tmp;
             }
         }
+
         return null;
     }
 
@@ -581,35 +555,36 @@ class Template
      * Usage :
      *    - {'Comment'|translate}
      *    - {'%d comments'|translate:$count}
-     * @see l10n()
-     *
      * @param array $params
      * @return string
+     * @see l10n()
+     *
      */
     static function modcompiler_translate($params)
     {
         global $conf, $lang;
 
-        switch (count($params))
-        {
+        switch (count($params)) {
             case 1:
                 if ($conf['compiled_template_cache_language']
-                    && ($key=self::get_php_str_val($params[0])) !== null
+                    && ($key = self::get_php_str_val($params[0])) !== null
                     && isset($lang[$key])
                 ) {
                     return var_export($lang[$key], true);
                 }
+
                 return 'l10n('.$params[0].')';
 
             default:
-                if ($conf['compiled_template_cache_language'])
-                {
+                if ($conf['compiled_template_cache_language']) {
                     $ret = 'sprintf(';
-                    $ret .= self::modcompiler_translate( array($params[0]) );
-                    $ret .= ','. implode(',', array_slice($params, 1));
+                    $ret .= self::modcompiler_translate(array($params[0]));
+                    $ret .= ','.implode(',', array_slice($params, 1));
                     $ret .= ')';
+
                     return $ret;
                 }
+
                 return 'l10n('.$params[0].','.implode(',', array_slice($params, 1)).')';
         }
     }
@@ -618,33 +593,31 @@ class Template
      * "translate_dec" variable modifier.
      * Usage :
      *    - {$count|translate_dec:'%d comment':'%d comments'}
-     * @see l10n_dec()
-     *
      * @param array $params
      * @return string
+     * @see l10n_dec()
+     *
      */
     static function modcompiler_translate_dec($params)
     {
         global $conf, $lang, $lang_info;
-        if ($conf['compiled_template_cache_language'])
-        {
+        if ($conf['compiled_template_cache_language']) {
             $ret = 'sprintf(';
-            if ($lang_info['zero_plural'])
-            {
+            if ($lang_info['zero_plural']) {
                 $ret .= '($tmp=('.$params[0].'))>1||$tmp==0';
-            }
-            else
-            {
+            } else {
                 $ret .= '($tmp=('.$params[0].'))>1';
             }
             $ret .= '?';
-            $ret .= self::modcompiler_translate( array($params[2]) );
+            $ret .= self::modcompiler_translate(array($params[2]));
             $ret .= ':';
-            $ret .= self::modcompiler_translate( array($params[1]) );
+            $ret .= self::modcompiler_translate(array($params[1]));
             $ret .= ',$tmp';
             $ret .= ')';
+
             return $ret;
         }
+
         return 'l10n_dec('.$params[1].','.$params[2].','.$params[0].')';
     }
 
@@ -657,7 +630,7 @@ class Template
      * @param string $delimiter
      * @return array
      */
-    static function mod_explode($text, $delimiter=',')
+    static function mod_explode($text, $delimiter = ',')
     {
         return explode($delimiter, $text);
     }
@@ -687,8 +660,7 @@ class Template
     function block_html_head($params, $content)
     {
         $content = trim($content);
-        if ( !empty($content) )
-        { // second call
+        if (!empty($content)) { // second call
             $this->html_head_elements[] = $content;
         }
     }
@@ -703,8 +675,7 @@ class Template
     function block_html_style($params, $content)
     {
         $content = trim($content);
-        if ( !empty($content) )
-        { // second call
+        if (!empty($content)) { // second call
             $this->html_style .= "\n".$content;
         }
     }
@@ -726,10 +697,10 @@ class Template
     function func_define_derivative($params, $smarty)
     {
         !empty($params['name']) or fatal_error('define_derivative missing name');
-        if (isset($params['type']))
-        {
+        if (isset($params['type'])) {
             $derivative = ImageStdParams::get_by_type($params['type']);
-            $smarty->assign( $params['name'], $derivative);
+            $smarty->assign($params['name'], $derivative);
+
             return;
         }
         !empty($params['width']) or fatal_error('define_derivative missing width');
@@ -738,22 +709,17 @@ class Template
         $w = intval($params['width']);
         $h = intval($params['height']);
         $crop = 0;
-        $minw=null;
-        $minh=null;
+        $minw = null;
+        $minh = null;
 
-        if (isset($params['crop']))
-        {
-            if (is_bool($params['crop']))
-            {
-                $crop = $params['crop'] ? 1:0;
-            }
-            else
-            {
-                $crop = round($params['crop']/100, 2);
+        if (isset($params['crop'])) {
+            if (is_bool($params['crop'])) {
+                $crop = $params['crop'] ? 1 : 0;
+            } else {
+                $crop = round($params['crop'] / 100, 2);
             }
 
-            if ($crop)
-            {
+            if ($crop) {
                 $minw = empty($params['min_width']) ? $w : intval($params['min_width']);
                 $minw <= $w or fatal_error('define_derivative invalid min_width');
                 $minh = empty($params['min_height']) ? $h : intval($params['min_height']);
@@ -761,7 +727,7 @@ class Template
             }
         }
 
-        $smarty->assign( $params['name'], ImageStdParams::get_custom($w, $h, $crop, $minw, $minh) );
+        $smarty->assign($params['name'], ImageStdParams::get_custom($w, $h, $crop, $minw, $minh));
     }
 
     /**
@@ -778,27 +744,33 @@ class Template
      */
     function func_combine_script($params)
     {
-        if (!isset($params['id']))
-        {
+        if (!isset($params['id'])) {
             trigger_error("combine_script: missing 'id' parameter", E_USER_ERROR);
         }
         $load = 0;
-        if (isset($params['load']))
-        {
-            switch ($params['load'])
-            {
-                case 'header': break;
-                case 'footer': $load=1; break;
-                case 'async': $load=2; break;
-                default: trigger_error("combine_script: invalid 'load' parameter", E_USER_ERROR);
+        if (isset($params['load'])) {
+            switch ($params['load']) {
+                case 'header':
+                    break;
+                case 'footer':
+                    $load = 1;
+                    break;
+                case 'async':
+                    $load = 2;
+                    break;
+                default:
+                    trigger_error("combine_script: invalid 'load' parameter", E_USER_ERROR);
             }
         }
 
-        $this->scriptLoader->add( $params['id'], $load,
-            empty($params['require']) ? array() : explode( ',', $params['require'] ),
+        $this->scriptLoader->add(
+            $params['id'],
+            $load,
+            empty($params['require']) ? array() : explode(',', $params['require']),
             @$params['path'],
             isset($params['version']) ? $params['version'] : 0,
-            @$params['template']);
+            @$params['template']
+        );
     }
 
     /**
@@ -810,52 +782,45 @@ class Template
      */
     function func_get_combined_scripts($params)
     {
-        if (!isset($params['load']))
-        {
+        if (!isset($params['load'])) {
             trigger_error("get_combined_scripts: missing 'load' parameter", E_USER_ERROR);
         }
-        $load = $params['load']=='header' ? 0 : 1;
+        $load = $params['load'] == 'header' ? 0 : 1;
         $content = array();
 
-        if ($load==0)
-        {
+        if ($load == 0) {
             return self::COMBINED_SCRIPTS_TAG;
-        }
-        else
-        {
+        } else {
             $scripts = $this->scriptLoader->get_footer_scripts();
-            foreach ($scripts[0] as $script)
-            {
-                $content[]=
+            foreach ($scripts[0] as $script) {
+                $content[] =
                     '<script type="text/javascript" src="'
-                    . self::make_script_src($script)
+                    .self::make_script_src($script)
                     .'"></script>';
             }
-            if (count($this->scriptLoader->inline_scripts))
-            {
-                $content[]= '<script type="text/javascript">//<![CDATA[
+            if (count($this->scriptLoader->inline_scripts)) {
+                $content[] = '<script type="text/javascript">//<![CDATA[
 ';
                 $content = array_merge($content, $this->scriptLoader->inline_scripts);
-                $content[]= '//]]></script>';
+                $content[] = '//]]></script>';
             }
 
-            if (count($scripts[1]))
-            {
-                $content[]= '<script type="text/javascript">';
-                $content[]= '(function() {
+            if (count($scripts[1])) {
+                $content[] = '<script type="text/javascript">';
+                $content[] = '(function() {
 var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTagName(\'script\').length-1];';
-                foreach ($scripts[1] as $id => $script)
-                {
-                    $content[]=
+                foreach ($scripts[1] as $id => $script) {
+                    $content[] =
                         's=document.createElement(\'script\'); s.type=\'text/javascript\'; s.async=true; s.src=\''
-                        . self::make_script_src($script)
+                        .self::make_script_src($script)
                         .'\';';
-                    $content[]= 'after = after.parentNode.insertBefore(s, after);';
+                    $content[] = 'after = after.parentNode.insertBefore(s, after);';
                 }
-                $content[]= '})();';
-                $content[]= '</script>';
+                $content[] = '})();';
+                $content[] = '</script>';
             }
         }
+
         return implode("\n", $content);
     }
 
@@ -868,18 +833,17 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
     private static function make_script_src($script)
     {
         $ret = '';
-        if ( $script->is_remote() )
+        if ($script->is_remote()) {
             $ret = $script->path;
-        else
-        {
+        } else {
             $ret = get_root_url().$script->path;
-            if ($script->version!==false)
-            {
-                $ret.= '?v'. ($script->version ? $script->version : PHPWG_VERSION);
+            if ($script->version !== false) {
+                $ret .= '?v'.($script->version ? $script->version : PHPWG_VERSION);
             }
         }
         // trigger the event for eventual use of a cdn
         $ret = trigger_change('combined_script', $ret, $script);
+
         return embellish_url($ret);
     }
 
@@ -893,8 +857,7 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
     function block_footer_script($params, $content)
     {
         $content = trim($content);
-        if ( !empty($content) )
-        { // second call
+        if (!empty($content)) { // second call
 
             $this->scriptLoader->add_inline(
                 $content,
@@ -916,13 +879,11 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
      */
     function func_combine_css($params)
     {
-        if (empty($params['path']))
-        {
+        if (empty($params['path'])) {
             fatal_error('combine_css missing path');
         }
 
-        if (!isset($params['id']))
-        {
+        if (!isset($params['id'])) {
             $params['id'] = md5($params['path']);
         }
 
@@ -950,7 +911,7 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
      * @param Callable $callback
      * @param int $weight
      */
-    function set_prefilter($handle, $callback, $weight=50)
+    function set_prefilter($handle, $callback, $weight = 50)
     {
         $this->external_filters[$handle][$weight][] = array('pre', $callback);
         ksort($this->external_filters[$handle]);
@@ -965,7 +926,7 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
      * @param Callable $callback
      * @param int $weight
      */
-    function set_postfilter($handle, $callback, $weight=50)
+    function set_postfilter($handle, $callback, $weight = 50)
     {
         $this->external_filters[$handle][$weight][] = array('post', $callback);
         ksort($this->external_filters[$handle]);
@@ -980,7 +941,7 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
      * @param Callable $callback
      * @param int $weight
      */
-    function set_outputfilter($handle, $callback, $weight=50)
+    function set_outputfilter($handle, $callback, $weight = 50)
     {
         $this->external_filters[$handle][$weight][] = array('output', $callback);
         ksort($this->external_filters[$handle]);
@@ -993,15 +954,12 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
      */
     function load_external_filters($handle)
     {
-        if (isset($this->external_filters[$handle]))
-        {
+        if (isset($this->external_filters[$handle])) {
             $compile_id = '';
-            foreach ($this->external_filters[$handle] as $filters)
-            {
-                foreach ($filters as $filter)
-                {
+            foreach ($this->external_filters[$handle] as $filters) {
+                foreach ($filters as $filter) {
                     list($type, $callback) = $filter;
-                    $compile_id .= $type.( is_array($callback) ? implode('', $callback) : $callback );
+                    $compile_id .= $type.(is_array($callback) ? implode('', $callback) : $callback);
                     $this->smarty->registerFilter($type, $callback);
                 }
             }
@@ -1016,12 +974,9 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
      */
     function unload_external_filters($handle)
     {
-        if (isset($this->external_filters[$handle]))
-        {
-            foreach ($this->external_filters[$handle] as $filters)
-            {
-                foreach ($filters as $filter)
-                {
+        if (isset($this->external_filters[$handle])) {
+            foreach ($this->external_filters[$handle] as $filters) {
+                foreach ($filters as $filter) {
                     list($type, $callback) = $filter;
                     $this->smarty->unregisterFilter($type, $callback);
                 }
@@ -1044,18 +999,17 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
         $rdq = preg_quote($rd, '#');
 
         $regex = array();
-        $tags = array('if','foreach','section','footer_script');
-        foreach($tags as $tag)
-        {
+        $tags = array('if', 'foreach', 'section', 'footer_script');
+        foreach ($tags as $tag) {
             $regex[] = "#^[ \t]+($ldq$tag"."[^$ld$rd]*$rdq)\s*$#m";
             $regex[] = "#^[ \t]+($ldq/$tag$rdq)\s*$#m";
         }
-        $tags = array('include','else','combine_script','html_head');
-        foreach($tags as $tag)
-        {
+        $tags = array('include', 'else', 'combine_script', 'html_head');
+        foreach ($tags as $tag) {
             $regex[] = "#^[ \t]+($ldq$tag"."[^$ld$rd]*$rdq)\s*$#m";
         }
-        $source = preg_replace( $regex, "$1", $source);
+        $source = preg_replace($regex, "$1", $source);
+
         return $source;
     }
 
@@ -1071,8 +1025,14 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
         // replaces echo PHP_STRING_LITERAL; with the string literal value
         $source = preg_replace_callback(
             '/\\<\\?php echo ((?:\'(?:(?:\\\\.)|[^\'])*\')|(?:"(?:(?:\\\\.)|[^"])*"));\\?\\>\\n/',
-            function($matches) { eval('$tmp='.$matches[1].';');return $tmp; },
-            $source);
+            function ($matches) {
+                eval('$tmp='.$matches[1].';');
+
+                return $tmp;
+            },
+            $source
+        );
+
         return $source;
     }
 
@@ -1086,23 +1046,19 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
     static function prefilter_local_css($source, $smarty)
     {
         $css = array();
-        foreach ($smarty->getTemplateVars('themes') as $theme)
-        {
+        foreach ($smarty->getTemplateVars('themes') as $theme) {
             $f = PWG_LOCAL_DIR.'css/'.$theme['id'].'-rules.css';
-            if (file_exists(PHPWG_ROOT_PATH.$f))
-            {
+            if (file_exists(Path::join(PHPWG_ROOT_PATH, $f))) {
                 $css[] = "{combine_css path='$f' order=10}";
             }
         }
         $f = PWG_LOCAL_DIR.'css/rules.css';
-        if (file_exists(PHPWG_ROOT_PATH.$f))
-        {
+        if (file_exists(Path::join(PHPWG_ROOT_PATH, $f))) {
             $css[] = "{combine_css path='$f' order=10}";
         }
 
-        if (!empty($css))
-        {
-            $source = str_replace("{get_combined_css}", implode( "\n", $css )."\n{get_combined_css}", $source);
+        if (!empty($css)) {
+            $source = str_replace("{get_combined_css}", implode("\n", $css)."\n{get_combined_css}", $source);
         }
 
         return $source;
@@ -1119,8 +1075,7 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
         global $themeconfs, $conf;
 
         $dir = realpath($dir);
-        if (!isset($themeconfs[$dir]))
-        {
+        if (!isset($themeconfs[$dir])) {
             $themeconf = array();
 //            debug_print_backtrace();
 //            die;
@@ -1128,6 +1083,7 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
             // Put themeconf in cache
             $themeconfs[$dir] = $themeconf;
         }
+
         return $themeconfs[$dir];
     }
 
@@ -1137,7 +1093,7 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
      * @param string $content
      * @param int $rank
      */
-    function add_picture_button($content, $rank=BUTTONS_RANK_NEUTRAL)
+    function add_picture_button($content, $rank = BUTTONS_RANK_NEUTRAL)
     {
         $this->picture_buttons[$rank][] = $content;
     }
@@ -1148,7 +1104,7 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
      * @param string $content
      * @param int $rank
      */
-    function add_index_button($content, $rank=BUTTONS_RANK_NEUTRAL)
+    function add_index_button($content, $rank = BUTTONS_RANK_NEUTRAL)
     {
         $this->index_buttons[$rank][] = $content;
     }
@@ -1158,12 +1114,10 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
      */
     function parse_picture_buttons()
     {
-        if (!empty($this->picture_buttons))
-        {
+        if (!empty($this->picture_buttons)) {
             ksort($this->picture_buttons);
             $buttons = array();
-            foreach ($this->picture_buttons as $k => $row)
-            {
+            foreach ($this->picture_buttons as $k => $row) {
                 $buttons = array_merge($buttons, $row);
             }
             $this->assign('PLUGIN_PICTURE_BUTTONS', $buttons);
@@ -1183,12 +1137,10 @@ var s,after = document.getElementsByTagName(\'script\')[document.getElementsByTa
      */
     function parse_index_buttons()
     {
-        if (!empty($this->index_buttons))
-        {
+        if (!empty($this->index_buttons)) {
             ksort($this->index_buttons);
             $buttons = array();
-            foreach ($this->index_buttons as $k => $row)
-            {
+            foreach ($this->index_buttons as $k => $row) {
                 $buttons = array_merge($buttons, $row);
             }
             $this->assign('PLUGIN_INDEX_BUTTONS', $buttons);

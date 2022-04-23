@@ -6,8 +6,6 @@
 // | file that was distributed with this source code.                      |
 // +-----------------------------------------------------------------------+
 
-if (!defined('PHPWG_ROOT_PATH')) die('Hacking attempt!');
-
 class updates
 {
   var $types = array();

@@ -10,91 +10,13 @@
  * @package functions\plugins
  */
 
-
 /** base directory of plugins */
-define('PHPWG_PLUGINS_PATH', PHPWG_ROOT_PATH.'plugins/');
+
+use Webmozart\PathUtil\Path;
+
+define('PHPWG_PLUGINS_PATH', Path::join(PHPWG_ROOT_PATH, 'plugins/'));
 /** default priority for plugins handlers */
 define('EVENT_HANDLER_PRIORITY_NEUTRAL', 50);
-
-
-/**
- * Used to declare maintenance methods of a plugin.
- */
-class PluginMaintain
-{
-  /** @var string $plugin_id */
-  protected $plugin_id;
-
-  /**
-   * @param string $id
-   */
-  function __construct($id)
-  {
-    $this->plugin_id = $id;
-  }
-
-  /**
-   * @param string $plugin_version
-   * @param array &$errors - used to return error messages
-   */
-  function install($plugin_version, &$errors=array()) {}
-
-  /**
-   * @param string $plugin_version
-   * @param array &$errors - used to return error messages
-   */
-  function activate($plugin_version, &$errors=array()) {}
-
-  function deactivate() {}
-
-  function uninstall() {}
-
-  /**
-   * @param string $old_version
-   * @param string $new_version
-   * @param array &$errors - used to return error messages
-   */
-  function update($old_version, $new_version, &$errors=array()) {}
-  
-  /**
-   * @removed 2.7
-   */
-  function autoUpdate()
-  {
-    if (is_admin() && !defined('IN_WS'))
-    {
-      trigger_error('Function PluginMaintain::autoUpdate deprecated', E_USER_WARNING);
-    }
-  }
-}
-
-/**
- * Used to declare maintenance methods of a theme.
- */
-class ThemeMaintain
-{
-  /** @var string $theme_id */
-  protected $theme_id;
-
-  /**
-   * @param string $id
-   */
-  function __construct($id)
-  {
-    $this->theme_id = $id;
-  }
-
-  /**
-   * @param string $theme_version
-   * @param array &$errors - used to return error messages
-   */
-  function activate($theme_version, &$errors=array()) {}
-
-  function deactivate() {}
-
-  function delete() {}
-}
-
 
 /**
  * Register an event handler.
@@ -437,5 +359,3 @@ function load_plugins()
     trigger_notify('plugins_loaded');
   }
 }
-
-?>
